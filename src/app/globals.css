@@ -1,0 +1,210 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* App theme tokens */
+  --color-app-bg: var(--app-bg);
+  --color-app-bg-secondary: var(--app-bg-secondary);
+  --color-app-card: var(--app-card);
+  --color-app-card-hover: var(--app-card-hover);
+  --color-app-text: var(--app-text);
+  --color-app-text-secondary: var(--app-text-secondary);
+  --color-app-text-muted: var(--app-text-muted);
+  --color-app-border: var(--app-border);
+  --color-app-border-subtle: var(--app-border-subtle);
+  --color-app-accent: var(--app-accent);
+  --color-app-accent-hover: var(--app-accent-hover);
+  --color-app-accent-text: var(--app-accent-text);
+  --color-app-accent-glow: var(--app-accent-glow);
+  --color-app-btn-primary: var(--app-btn-primary);
+  --color-app-btn-primary-hover: var(--app-btn-primary-hover);
+  --color-app-btn-primary-text: var(--app-btn-primary-text);
+  --color-app-icon-primary: var(--app-icon-primary);
+  --color-app-icon-secondary: var(--app-icon-secondary);
+  --color-app-surface: var(--app-surface);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Light theme — clean white, sharp and professional */
+  --app-bg: #ffffff;
+  --app-bg-secondary: #f7f8fb;
+  --app-card: #ffffff;
+  --app-card-hover: #f9fafb;
+  --app-text: #0a0f1e;
+  --app-text-secondary: #3e4556;
+  --app-text-muted: #7c849a;
+  --app-border: #dbe0ea;
+  --app-border-subtle: #edf0f5;
+  --app-accent: #6366f1;
+  --app-accent-hover: #4f46e5;
+  --app-accent-text: #4f46e5;
+  --app-accent-glow: rgba(99, 102, 241, 0.10);
+  --app-btn-primary: #6366f1;
+  --app-btn-primary-hover: #4f46e5;
+  --app-btn-primary-text: #ffffff;
+  --app-icon-primary: #6366f1;
+  --app-icon-secondary: #06b6d4;
+  --app-gradient-start: #6366f1;
+  --app-gradient-end: #06b6d4;
+  --app-surface: #f1f3f8;
+
+  --background: #ffffff;
+  --foreground: #0a0f1e;
+  --card: #ffffff;
+  --card-foreground: #0a0f1e;
+  --popover: #ffffff;
+  --popover-foreground: #0a0f1e;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f8fb;
+  --secondary-foreground: #0a0f1e;
+  --muted: #f7f8fb;
+  --muted-foreground: #7c849a;
+  --accent: #f7f8fb;
+  --accent-foreground: #0a0f1e;
+  --destructive: #ef4444;
+  --border: #dbe0ea;
+  --input: #dbe0ea;
+  --ring: #6366f1;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: #f7f8fb;
+  --sidebar-foreground: #0a0f1e;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f7f8fb;
+  --sidebar-accent-foreground: #0a0f1e;
+  --sidebar-border: #dbe0ea;
+  --sidebar-ring: #6366f1;
+}
+
+.dark {
+  /* Dark theme — deep, atmospheric like Builder/Bolt/Railway */
+  --app-bg: #09090b;
+  --app-bg-secondary: #0f0f14;
+  --app-card: #141419;
+  --app-card-hover: #1a1a22;
+  --app-text: #fafafa;
+  --app-text-secondary: #a1a1aa;
+  --app-text-muted: #52525b;
+  --app-border: #27272a;
+  --app-border-subtle: #1c1c20;
+  --app-accent: #818cf8;
+  --app-accent-hover: #a5b4fc;
+  --app-accent-text: #a5b4fc;
+  --app-accent-glow: rgba(129, 140, 248, 0.12);
+  --app-btn-primary: #6366f1;
+  --app-btn-primary-hover: #818cf8;
+  --app-btn-primary-text: #ffffff;
+  --app-icon-primary: #818cf8;
+  --app-icon-secondary: #22d3ee;
+  --app-gradient-start: #818cf8;
+  --app-gradient-end: #22d3ee;
+  --app-surface: #111114;
+
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #141419;
+  --card-foreground: #fafafa;
+  --popover: #141419;
+  --popover-foreground: #fafafa;
+  --primary: #818cf8;
+  --primary-foreground: #0f0f14;
+  --secondary: #1a1a22;
+  --secondary-foreground: #fafafa;
+  --muted: #1a1a22;
+  --muted-foreground: #52525b;
+  --accent: #1a1a22;
+  --accent-foreground: #fafafa;
+  --destructive: #ef4444;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #818cf8;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: #0f0f14;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #818cf8;
+  --sidebar-primary-foreground: #0f0f14;
+  --sidebar-accent: #1a1a22;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #818cf8;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Marquee / ticker animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

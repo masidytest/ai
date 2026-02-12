@@ -1,0 +1,29 @@
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--app-gradient-start), var(--app-gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle glow border */
+.glow-border {
+  border: 1px solid var(--app-border);
+  box-shadow: 0 0 0 1px var(--app-accent-glow);
+}
+
+/* Section divider gradient */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--app-border), transparent);
+}
+
+/* Light mode — elevated navbar when scrolled */
+:root:not(.dark) .navbar-scrolled {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Light mode — integrations strip subtle inset */
+:root:not(.dark) .integrations-strip {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.04), inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+}

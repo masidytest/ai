@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "../../ai-ide/frontend/tests/**/*.ts",
+    "../../ai-ide/frontend/tests/**/*.tsx",
+    "../../ai-ide/frontend/src/**/*.ts",
+    "../../ai-ide/frontend/src/**/*.tsx"
+  ]
+}
