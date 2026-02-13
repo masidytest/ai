@@ -215,10 +215,10 @@ export function CloudPage() {
       </div>
 
       {/* Main content */}
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         <div className="flex-1 min-w-0">
           {view === "grid" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {filtered.map((s, i) => {
                 const sc = statusConfig[s.status];
                 return (
@@ -253,11 +253,11 @@ export function CloudPage() {
               })}
             </div>
           ) : (
-            <div className="bg-app-card border border-app-border rounded-xl overflow-hidden">
-              <table className="w-full text-left text-sm">
+            <div className="bg-app-card border border-app-border rounded-xl overflow-x-auto">
+              <table className="w-full text-left text-sm min-w-[600px]">
                 <thead>
                   <tr className="border-b border-app-border text-xs text-app-text-muted uppercase tracking-wider">
-                    <th className="px-4 py-3">Name</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">IP</th><th className="px-4 py-3">Region</th><th className="px-4 py-3">CPU</th><th className="px-4 py-3">RAM</th><th className="px-4 py-3">Actions</th>
+                    <th className="px-2 sm:px-4 py-3">Name</th><th className="px-2 sm:px-4 py-3">Status</th><th className="px-2 sm:px-4 py-3 hidden sm:table-cell">IP</th><th className="px-2 sm:px-4 py-3">Region</th><th className="px-2 sm:px-4 py-3">CPU</th><th className="px-2 sm:px-4 py-3">RAM</th><th className="px-2 sm:px-4 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -289,7 +289,7 @@ export function CloudPage() {
         {/* Detail Panel */}
         <AnimatePresence>
           {selectedServer && (
-            <motion.div initial={{ width: 0, opacity: 0 }} animate={{ width: 320, opacity: 1 }} exit={{ width: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="shrink-0 overflow-hidden">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="w-full md:w-80 md:shrink-0 overflow-hidden">
               <div className="bg-app-card border border-app-border rounded-xl p-5 h-full">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-app-text">{selectedServer.name}</h3>

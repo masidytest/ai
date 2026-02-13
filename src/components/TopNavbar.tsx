@@ -84,8 +84,8 @@ export function TopNavbar() {
           </button>
         </div>
 
-        {/* Center: Breadcrumbs */}
-        <nav className="flex-1 flex justify-center">
+        {/* Center: Breadcrumbs (hidden on small mobile) */}
+        <nav className="flex-1 hidden sm:flex justify-center">
           <ol className="flex gap-2 text-app-text-muted text-sm">
             {crumbs.map((c, i) => (
               <li key={c.href} className="flex items-center gap-2">
@@ -117,7 +117,7 @@ export function TopNavbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 top-full mt-2 w-72 bg-app-card border border-app-border rounded-xl shadow-xl overflow-hidden z-50"
+                  className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-72 max-w-sm bg-app-card border border-app-border rounded-xl shadow-xl overflow-hidden z-50"
                 >
                   <div className="p-3 border-b border-app-border">
                     <div className="relative">
@@ -168,7 +168,7 @@ export function TopNavbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 top-full mt-2 w-80 bg-app-card border border-app-border rounded-xl shadow-xl overflow-hidden z-50"
+                  className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-app-card border border-app-border rounded-xl shadow-xl overflow-hidden z-50"
                 >
                   <div className="p-3 border-b border-app-border flex items-center justify-between">
                     <span className="text-sm font-semibold text-app-text">Notifications</span>

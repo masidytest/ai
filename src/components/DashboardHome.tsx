@@ -243,11 +243,11 @@ export function DashboardHome() {
         )}
       </AnimatePresence>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 mb-12">
         {cards.map((card, i) => (
           <motion.div
             key={card.label}
-            className="bg-app-card border border-app-border rounded-2xl p-6 flex flex-col items-center text-center shadow-sm cursor-pointer hover:border-app-accent/30 hover:shadow-lg transition-all group"
+            className="bg-app-card border border-app-border rounded-2xl p-4 sm:p-6 flex flex-col items-center text-center shadow-sm cursor-pointer hover:border-app-accent/30 hover:shadow-lg transition-all group"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
@@ -257,12 +257,12 @@ export function DashboardHome() {
             <div className="w-12 h-12 rounded-xl bg-app-accent/10 flex items-center justify-center mb-3 group-hover:bg-app-accent/15 transition-colors">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--app-accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={card.icon}/></svg>
             </div>
-            <span className="text-lg font-semibold text-app-text">{card.label}</span>
+            <span className="text-sm sm:text-lg font-semibold text-app-text">{card.label}</span>
           </motion.div>
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-8">
         {/* Recent Activity */}
         <div className="flex-1 bg-app-card border border-app-border rounded-2xl p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-app-text mb-4">Recent Activity</h2>

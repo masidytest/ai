@@ -184,10 +184,10 @@ export function ProjectsPage() {
               whileHover={{ y: -4 }}
               onClick={() => openProject(project)}
             >
-              {/* Delete button */}
+              {/* Delete button (always visible on touch, hover on desktop) */}
               <button
                 onClick={(e) => handleDelete(project.id, e)}
-                className="absolute top-3 right-3 p-1.5 rounded-lg text-app-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
+                className="absolute top-3 right-3 p-1.5 rounded-lg text-app-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100"
                 title="Delete project"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
@@ -230,16 +230,16 @@ export function ProjectsPage() {
         </div>
       ) : (
         /* List View */
-        <div className="bg-app-card border border-app-border rounded-2xl overflow-hidden">
-          <table className="w-full text-left">
+        <div className="bg-app-card border border-app-border rounded-2xl overflow-x-auto">
+          <table className="w-full text-left min-w-[500px]">
             <thead>
               <tr className="border-b border-app-border">
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Project</th>
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Framework</th>
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Files</th>
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Updated</th>
-                <th className="px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider"></th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Project</th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Framework</th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Status</th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider hidden sm:table-cell">Files</th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider">Updated</th>
+                <th className="px-3 sm:px-6 py-3 text-xs font-semibold text-app-text-muted uppercase tracking-wider"></th>
               </tr>
             </thead>
             <tbody>
@@ -252,23 +252,23 @@ export function ProjectsPage() {
                   transition={{ delay: i * 0.03 }}
                   onClick={() => openProject(project)}
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-app-accent/10 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-lg bg-app-accent/10 flex items-center justify-center shrink-0">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--app-accent)" strokeWidth="1.8" strokeLinecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
                       </div>
-                      <div className="font-medium text-app-text">{project.name}</div>
+                      <div className="font-medium text-app-text truncate">{project.name}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-app-text-secondary">{project.framework}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-4 text-sm text-app-text-secondary">{project.framework}</td>
+                  <td className="px-3 sm:px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColor[project.status]}`}>
                       {project.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-app-text-secondary">{project.files.length} files</td>
-                  <td className="px-6 py-4 text-sm text-app-text-secondary">{timeAgo(project.updatedAt)}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-4 text-sm text-app-text-secondary hidden sm:table-cell">{project.files.length} files</td>
+                  <td className="px-3 sm:px-6 py-4 text-sm text-app-text-secondary">{timeAgo(project.updatedAt)}</td>
+                  <td className="px-3 sm:px-6 py-4">
                     <button
                       onClick={(e) => handleDelete(project.id, e)}
                       className="p-1.5 rounded-lg text-app-text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"

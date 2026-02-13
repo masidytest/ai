@@ -281,6 +281,18 @@ function buildPreviewHtml(files: FileNode[]): string {
   return html;
 }
 
+/* ─── Mobile detection hook ─── */
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 /* ─── Main Component ─── */
 export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}) {
   const searchParams = useSearchParams();
@@ -288,6 +300,8 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(projectIdParam);
 
   const [files, setFiles] = useState<FileNode[]>(defaultFiles);
+  const isMobile = useIsMobile();
+  const [mobileTab, setMobileTab] = useState<"code" | "preview" | "chat">("code");
 
   // Load saved project files from Supabase on mount
   useEffect(() => {
@@ -299,9 +313,9 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
   }, [projectIdParam]);
   const [activeFile, setActiveFile] = useState(0);
   const [showConsole, setShowConsole] = useState(false);
-  const [showFileTree, setShowFileTree] = useState(true);
+  const [showFileTree, setShowFileTree] = useState(!isMobile);
   const [showAi, setShowAi] = useState(!!initialPrompt);
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(!isMobile);
   const [isBuilding, setIsBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState(0);
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
@@ -825,27 +839,27 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
   return (
     <div className="flex flex-col h-full bg-app-bg text-app-text overflow-hidden">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-app-bg-secondary border-b border-app-border shrink-0">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-2 md:px-4 py-2 bg-app-bg-secondary border-b border-app-border shrink-0 overflow-x-auto">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
           <button onClick={() => setShowFileTree(!showFileTree)} className={`p-1.5 rounded-lg transition-colors ${showFileTree ? "bg-app-accent/15 text-app-accent-text" : "text-app-text-muted hover:text-app-text"}`} title="File tree">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
           </button>
-          <div className="h-4 w-px bg-app-border mx-1" />
-          <button onClick={handleRun} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors text-xs font-medium">
+          <div className="h-4 w-px bg-app-border mx-0.5 md:mx-1" />
+          <button onClick={handleRun} className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors text-xs font-medium">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Run
+            <span className="hidden sm:inline">Run</span>
           </button>
-          <button onClick={handleBuild} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-medium">
+          <button onClick={handleBuild} className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-medium">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 4v5h.58a4.97 4.97 0 012.84-2.84V4H4z"/><path d="M20 4h-5v2.16A4.97 4.97 0 0117.42 9H20V4z"/></svg>
-            Build
+            <span className="hidden sm:inline">Build</span>
           </button>
-          <button onClick={handleLint} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 transition-colors text-xs font-medium">
+          <button onClick={handleLint} className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 transition-colors text-xs font-medium">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/></svg>
             Lint
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
+          <div className="relative hidden sm:block">
             <button onClick={() => setShowPublishMenu(!showPublishMenu)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 transition-colors text-xs font-medium">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
               Publish
@@ -869,7 +883,7 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
               </>
             )}
           </div>
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <button onClick={() => setShowGitMenu(!showGitMenu)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors text-xs font-medium ${gitRepo ? "bg-orange-500/10 text-orange-400 hover:bg-orange-500/20" : "bg-gray-500/10 text-gray-400 hover:bg-gray-500/20"}`}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><path d="M6 9v12"/></svg>
               Git
@@ -898,13 +912,13 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
               </>
             )}
           </div>
-          <div className="h-4 w-px bg-app-border mx-1" />
+          <div className="h-4 w-px bg-app-border mx-0.5 md:mx-1 hidden sm:block" />
           <span className="text-xs text-app-text-muted hidden md:block">Ln {cursorLine + 1}, Col 1</span>
           <span className="text-xs px-2 py-0.5 rounded bg-app-accent/10 text-app-accent-text hidden md:block">{file.language}</span>
-          <div className="h-4 w-px bg-app-border mx-1" />
+          <div className="h-4 w-px bg-app-border mx-0.5 md:mx-1 hidden sm:block" />
 
-          {/* View mode switcher: Code / Split / Preview */}
-          <div className="flex items-center bg-app-bg rounded-lg border border-app-border/50 p-0.5">
+          {/* View mode switcher: Code / Split / Preview (hidden on mobile, tab bar replaces it) */}
+          <div className="hidden sm:flex items-center bg-app-bg rounded-lg border border-app-border/50 p-0.5">
             {([
               { mode: "code" as const, label: "Code", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> },
               { mode: "split" as const, label: "Split", icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg> },
@@ -926,10 +940,10 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
             ))}
           </div>
 
-          <div className="h-4 w-px bg-app-border mx-1" />
+          <div className="h-4 w-px bg-app-border mx-1 hidden sm:block" />
 
-          {/* Layout panel manager */}
-          <div className="relative">
+          {/* Layout panel manager (hidden on mobile) */}
+          <div className="relative hidden sm:block">
             <button onClick={() => setShowLayoutMenu(!showLayoutMenu)} className="flex items-center gap-1 p-1.5 rounded-lg text-app-text-muted hover:text-app-text hover:bg-app-card transition-colors" title="Toggle panels">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
             </button>
@@ -959,11 +973,40 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
         </div>
       </div>
 
+      {/* Mobile tab bar */}
+      {isMobile && (
+        <div className="flex items-center bg-app-bg-secondary border-b border-app-border shrink-0 md:hidden">
+          {([
+            { tab: "code" as const, label: "Code", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> },
+            { tab: "preview" as const, label: "Preview", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> },
+            { tab: "chat" as const, label: "AI Chat", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> },
+          ]).map(({ tab, label, icon }) => (
+            <button
+              key={tab}
+              onClick={() => {
+                setMobileTab(tab);
+                if (tab === "preview") { setShowPreview(true); setShowAi(false); }
+                else if (tab === "chat") { setShowAi(true); setShowPreview(false); }
+                else { setShowPreview(false); setShowAi(false); }
+              }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium transition-colors border-b-2 ${
+                mobileTab === tab
+                  ? "text-app-accent-text border-app-accent bg-app-accent/5"
+                  : "text-app-text-muted border-transparent"
+              }`}
+            >
+              {icon}
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Main area */}
       <div className="flex flex-1 overflow-hidden" data-ide-main>
-        {/* File tree — resizable */}
+        {/* File tree — resizable (hidden on mobile) */}
         <AnimatePresence>
-          {showFileTree && (
+          {showFileTree && !isMobile && (
             <motion.div
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: fileTree.size, opacity: 1 }}
@@ -1026,8 +1069,8 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
 
         {/* Editor + Console + Preview container */}
         <div className="flex-1 flex overflow-hidden min-w-0">
-          {/* Editor column — hidden in preview-only mode */}
-          {viewMode !== "preview" && <div className="flex flex-col overflow-hidden flex-1 min-w-[200px] border-r border-app-border">
+          {/* Editor column — hidden in preview-only mode, or when mobile tab is not code */}
+          {viewMode !== "preview" && (!isMobile || mobileTab === "code") && <div className="flex flex-col overflow-hidden flex-1 min-w-0 md:min-w-[200px] border-r border-app-border">
             {/* Tabs */}
             <div className="flex items-center bg-app-bg-secondary border-b border-app-border overflow-x-auto shrink-0">
               {files.map((f, i) => (
@@ -1054,7 +1097,7 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
                   <tbody>
                     {lines.map((line, i) => (
                       <tr key={i} className={cursorLine === i ? "bg-app-accent/[0.06]" : ""}>
-                        <td className="w-10 text-right pr-3 pl-2 text-app-text-muted/30 select-none text-[11px] sticky left-0 bg-inherit">{i + 1}</td>
+                        <td className="w-8 md:w-10 text-right pr-2 md:pr-3 pl-1 md:pl-2 text-app-text-muted/30 select-none text-[10px] md:text-[11px] sticky left-0 bg-inherit">{i + 1}</td>
                         <td className="pr-4 whitespace-pre">{tokenize(line, file.language)}</td>
                       </tr>
                     ))}
@@ -1083,7 +1126,7 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
                   }
                 }}
                 spellCheck={false}
-                className="absolute inset-0 w-full h-full font-mono text-[13px] leading-6 bg-transparent text-transparent caret-app-accent-text resize-none outline-none z-20 overflow-auto pl-12 pr-4 py-0"
+                className="absolute inset-0 w-full h-full font-mono text-[13px] leading-6 bg-transparent text-transparent caret-app-accent-text resize-none outline-none z-20 overflow-auto pl-10 md:pl-12 pr-4 py-0"
                 style={{ tabSize: 2 }}
               />
             </div>
@@ -1117,8 +1160,8 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
             </AnimatePresence>
           </div>}
 
-          {/* Resize handle between editor and preview */}
-          {viewMode === "split" && showPreview && <ResizeHandle direction="horizontal" onResize={(d) => {
+          {/* Resize handle between editor and preview (desktop only) */}
+          {viewMode === "split" && showPreview && !isMobile && <ResizeHandle direction="horizontal" onResize={(d) => {
             const container = document.querySelector('[data-ide-main]');
             if (!container) return;
             const totalW = container.clientWidth;
@@ -1128,13 +1171,13 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
 
           {/* Live Preview Panel — resizable */}
           <AnimatePresence>
-            {showPreview && (
+            {showPreview && (!isMobile || mobileTab === "preview") && (
               <motion.div
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: viewMode === "preview" ? "100%" : `${previewPanel.size}%`, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
+                initial={isMobile ? { opacity: 0 } : { width: 0, opacity: 0 }}
+                animate={isMobile ? { opacity: 1 } : { width: viewMode === "preview" ? "100%" : `${previewPanel.size}%`, opacity: 1 }}
+                exit={isMobile ? { opacity: 0 } : { width: 0, opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className={`flex flex-col overflow-hidden bg-app-bg-secondary ${viewMode === "preview" ? "flex-1" : "shrink-0"}`}
+                className={`flex flex-col overflow-hidden bg-app-bg-secondary ${isMobile ? "flex-1" : viewMode === "preview" ? "flex-1" : "shrink-0"}`}
               >
                 {/* Preview toolbar */}
                 <div className="flex items-center justify-between px-3 py-1.5 border-b border-app-border shrink-0">
@@ -1193,17 +1236,17 @@ export default function AiIde({ initialPrompt }: { initialPrompt?: string } = {}
           </AnimatePresence>
         </div>
 
-        {/* AI Assistant — resizable */}
+        {/* AI Assistant — resizable on desktop, full-width on mobile */}
         <AnimatePresence>
-          {showAi && (
+          {showAi && (!isMobile || mobileTab === "chat") && (
             <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: aiPanel.size, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
+              initial={isMobile ? { opacity: 0 } : { width: 0, opacity: 0 }}
+              animate={isMobile ? { opacity: 1 } : { width: aiPanel.size, opacity: 1 }}
+              exit={isMobile ? { opacity: 0 } : { width: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="bg-app-bg-secondary flex overflow-hidden shrink-0"
+              className={`bg-app-bg-secondary flex overflow-hidden ${isMobile ? "flex-1" : "shrink-0"}`}
             >
-              <ResizeHandle direction="horizontal" onResize={(d) => aiPanel.handleResize(-d)} />
+              {!isMobile && <ResizeHandle direction="horizontal" onResize={(d) => aiPanel.handleResize(-d)} />}
               <div className="flex-1 flex flex-col overflow-hidden border-l border-app-border">
               <div className="px-3 py-2.5 border-b border-app-border flex items-center gap-2">
                 <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-app-accent/30 to-purple-500/20 flex items-center justify-center">

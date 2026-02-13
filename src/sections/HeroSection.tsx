@@ -110,8 +110,8 @@ export function HeroSection() {
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-[92vh] w-full overflow-hidden bg-app-bg pt-20 pb-16 px-4">
-      {/* Atmospheric gradient orbs */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      {/* Atmospheric gradient orbs (hidden on mobile to prevent overflow) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none hidden md:block">
         <div className="absolute top-[-30%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full bg-[radial-gradient(ellipse,rgba(99,102,241,0.12)_0%,transparent_60%)] dark:bg-[radial-gradient(ellipse,var(--app-accent-glow)_0%,transparent_60%)] blur-3xl opacity-80" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.10)_0%,transparent_70%)] dark:bg-[radial-gradient(circle,rgba(6,182,212,0.08)_0%,transparent_70%)] blur-3xl" />
       </div>
@@ -125,7 +125,7 @@ export function HeroSection() {
         {/* Badge */}
         <motion.a
           href="#platform"
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-app-border bg-app-card/60 backdrop-blur-sm text-base text-app-text-secondary mb-8 hover:border-app-accent/40 transition-colors"
+          className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full border border-app-border bg-app-card/60 backdrop-blur-sm text-sm sm:text-base text-app-text-secondary mb-8 hover:border-app-accent/40 transition-colors"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15 }}
@@ -136,10 +136,10 @@ export function HeroSection() {
         </motion.a>
 
         {/* Headline */}
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-app-text leading-[1.05] mb-6">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-app-text leading-[1.05] mb-6">
           The AI platform to
           <br />
-          <span className="relative inline-flex justify-center min-w-[340px] sm:min-w-[520px] md:min-w-[600px] h-[1.25em] px-2">
+          <span className="relative inline-flex justify-center min-w-[260px] sm:min-w-[520px] md:min-w-[600px] h-[1.25em] px-2">
             <AnimatePresence mode="wait">
               <motion.span
                 key={wordIndex}
@@ -156,7 +156,7 @@ export function HeroSection() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-app-text-secondary max-w-2xl mb-10 leading-relaxed">
+        <p className="text-base sm:text-xl md:text-2xl text-app-text-secondary max-w-2xl mb-10 leading-relaxed">
           AI IDE, Visual UI Builder, Workflow Automation, Cloud Hosting, Database, and Domains — everything you need from idea to production, unified in one platform.
         </p>
 
@@ -289,7 +289,7 @@ export function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <span className="text-base text-app-text-muted mr-1">or start with</span>
+          <span className="text-sm sm:text-base text-app-text-muted mr-1">or start with</span>
           {[
             { label: "AI IDE", href: "/dashboard/ai-ide" },
             { label: "UI Builder", href: "/dashboard/builder" },

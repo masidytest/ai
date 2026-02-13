@@ -182,9 +182,9 @@ export function DatabasePage() {
       </div>
 
       {/* Main Layout */}
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {/* Database List */}
-        <div className={`${selectedDb ? "w-1/3" : "w-full"} transition-all`}>
+        <div className={`${selectedDb ? "w-full md:w-1/3" : "w-full"} transition-all`}>
           <div className="space-y-2">
             {filtered.map((db, i) => {
               const ec = engineColor[db.engine];
@@ -212,7 +212,7 @@ export function DatabasePage() {
         {/* Detail Panel */}
         <AnimatePresence>
           {selectedDb && (
-            <motion.div initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "67%" }} exit={{ opacity: 0, width: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="w-full md:w-2/3 overflow-hidden">
               <div className="bg-app-card border border-app-border rounded-xl overflow-hidden h-full">
                 {/* Detail header */}
                 <div className="flex items-center justify-between px-5 py-3 border-b border-app-border">
@@ -227,9 +227,9 @@ export function DatabasePage() {
                   </div>
                 </div>
                 {/* Tabs */}
-                <div className="flex border-b border-app-border px-5">
+                <div className="flex border-b border-app-border px-3 md:px-5 overflow-x-auto">
                   {(["overview", "query", "schema", "backups"] as const).map((t) => (
-                    <button key={t} onClick={() => setActiveTab(t)} className={`px-4 py-2.5 text-xs font-medium capitalize transition-colors border-b-2 -mb-px ${activeTab === t ? "text-app-accent-text border-app-accent" : "text-app-text-muted border-transparent hover:text-app-text"}`}>{t}</button>
+                    <button key={t} onClick={() => setActiveTab(t)} className={`px-3 md:px-4 py-2.5 text-xs font-medium capitalize transition-colors border-b-2 -mb-px whitespace-nowrap ${activeTab === t ? "text-app-accent-text border-app-accent" : "text-app-text-muted border-transparent hover:text-app-text"}`}>{t}</button>
                   ))}
                 </div>
 
