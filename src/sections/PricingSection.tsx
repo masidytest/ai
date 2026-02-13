@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const plans = [
@@ -67,7 +68,30 @@ const plans = [
 ];
 
 export function PricingSection() {
+  const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+
+  async function handleCheckout(planName: string) {
+    setCheckoutLoading(planName);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planName, annual: isAnnual }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Failed to start checkout");
+      }
+    } catch {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setCheckoutLoading(null);
+    }
+  }
 
   return (
     <section id="pricing" className="w-full py-28 bg-app-bg overflow-hidden">
@@ -191,16 +215,25 @@ export function PricingSection() {
                   )}
                 </div>
 
-                <a
-                  href={plan.cta === "Contact Sales" ? "/contact" : "/dashboard"}
-                  className={`relative z-10 w-full text-center py-3.5 rounded-xl font-bold text-sm transition-all block hover:scale-[1.02] ${
+                <button
+                  onClick={() => {
+                    if (plan.name === "Pro") {
+                      handleCheckout("Pro");
+                    } else if (plan.cta === "Contact Sales") {
+                      router.push("/contact");
+                    } else {
+                      router.push("/signup");
+                    }
+                  }}
+                  disabled={checkoutLoading === plan.name}
+                  className={`relative z-10 w-full text-center py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed ${
                     isPopular
                       ? "bg-app-btn-primary text-app-btn-primary-text hover:bg-app-btn-primary-hover shadow-lg shadow-app-accent-glow"
                       : "border border-app-border text-app-text hover:bg-app-card"
                   } mb-8`}
                 >
-                  {plan.cta}
-                </a>
+                  {checkoutLoading === plan.name ? "Redirecting..." : plan.cta}
+                </button>
 
                 <ul className="relative z-10 space-y-3 flex-1">
                   {plan.features.map((feature, fi) => (

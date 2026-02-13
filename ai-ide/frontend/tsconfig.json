@@ -1,12 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    // ...existing compiler options...
   },
   "include": [
-    "../../ai-ide/frontend/tests/**/*.ts",
-    "../../ai-ide/frontend/tests/**/*.tsx",
-    "../../ai-ide/frontend/src/**/*.ts",
-    "../../ai-ide/frontend/src/**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out"
   ]
 }

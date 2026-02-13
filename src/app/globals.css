@@ -208,3 +208,9 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+/* Override Next.js portal positioning (persisted from browser preview) */
+nextjs-portal {
+  left: unset;
+  top: unset;
+}

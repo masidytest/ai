@@ -3,10 +3,45 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Email and password are required.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        setError(typeof signInError.message === "string" ? signInError.message : "Invalid email or password.");
+        return;
+      }
+
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-app-bg px-4 pt-20">
@@ -23,8 +58,14 @@ export default function LoginPage() {
 
         <form
           className="bg-app-card border border-app-border rounded-2xl p-8 shadow-lg"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleLogin}
         >
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
           <label className="block mb-5">
             <span className="text-sm font-medium text-app-text-secondary mb-1.5 block">Email</span>
             <input
@@ -49,9 +90,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-app-btn-primary text-app-btn-primary-text font-bold text-sm hover:bg-app-btn-primary-hover transition-colors shadow-lg shadow-app-accent-glow"
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-app-btn-primary text-app-btn-primary-text font-bold text-sm hover:bg-app-btn-primary-hover transition-colors shadow-lg shadow-app-accent-glow disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
 
           <div className="flex items-center justify-between mt-5 text-sm">
